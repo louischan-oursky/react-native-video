@@ -1,6 +1,7 @@
 #import "RCTVideoManager.h"
 #import "RCTVideo.h"
 #import <React/RCTBridge.h>
+#import <React/RCTUIManager.h>
 #import <AVFoundation/AVFoundation.h>
 
 @implementation RCTVideoManager
@@ -58,6 +59,14 @@ RCT_EXPORT_VIEW_PROPERTY(onPlaybackRateChange, RCTBubblingEventBlock);
     @"ScaleAspectFit": AVLayerVideoGravityResizeAspect,
     @"ScaleAspectFill": AVLayerVideoGravityResizeAspectFill
   };
+}
+
+RCT_EXPORT_METHOD(stopVideo:(nonnull NSNumber *)reactTag)
+{
+  [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+    RCTVideo *videoView = (RCTVideo *) viewRegistry[reactTag];
+    [videoView stopVideo];
+  }];
 }
 
 @end

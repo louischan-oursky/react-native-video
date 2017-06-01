@@ -1,5 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-import {StyleSheet, requireNativeComponent, NativeModules, View, Image} from 'react-native';
+import ReactNative, {
+  Image,
+  NativeModules,
+  Platform,
+  requireNativeComponent,
+  StyleSheet,
+  View,
+  UIManager,
+} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import VideoResizeMode from './VideoResizeMode.js';
 
@@ -17,6 +25,16 @@ export default class Video extends Component {
     this.state = {
       showPoster: true,
     };
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'ios') {
+      UIManager.dispatchViewManagerCommand(
+        ReactNative.findNodeHandle(this._root),
+        UIManager.RCTVideo.Commands.stopVideo,
+        []
+      );
+    }
   }
 
   setNativeProps(nativeProps) {

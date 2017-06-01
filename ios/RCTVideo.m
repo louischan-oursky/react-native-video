@@ -753,9 +753,7 @@ static NSString *const playbackRate = @"rate";
   }
 }
 
-#pragma mark - Lifecycle
-
-- (void)removeFromSuperview
+- (void)stopVideo
 {
   [_player pause];
   if (_playbackRateObserverRegistered) {
@@ -763,18 +761,24 @@ static NSString *const playbackRate = @"rate";
     _playbackRateObserverRegistered = NO;
   }
   _player = nil;
-
+  
   [self removePlayerLayer];
-
+  
   [_playerViewController.view removeFromSuperview];
   _playerViewController = nil;
-
+  
   [self removePlayerTimeObserver];
   [self removePlayerItemObservers];
-
+  
   _eventDispatcher = nil;
   [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
+#pragma mark - Lifecycle
+
+- (void)removeFromSuperview
+{
+  [self stopVideo];
   [super removeFromSuperview];
 }
 
